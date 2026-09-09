@@ -11,7 +11,13 @@ public class CarInput : MonoBehaviour
     private TrailHeadControls controls;
 
     public float Steering {get; private set;}
-    public float Throttle {get; private set;}
+    public float Throttle
+    {
+        get
+        {
+            return controls.Driving.Throttle.ReadValue<float>();
+        }
+    }
     public float Brake {get; private set;}
 
     public bool Handbrake {get; private set;}
@@ -33,12 +39,19 @@ public class CarInput : MonoBehaviour
 
     private void Update()
     {
+        //Debug.Log(
+          //  "Steering: " + controls.Driving.Steer.ReadValue<float>().ToString("F3") +
+            //" | Throttle: " + controls.Driving.Throttle.ReadValue<float>().ToString("F3") +
+            //" | Brake: " + controls.Driving.Brake.ReadValue<float>().ToString("F3") +
+            //" | Handbrake: " + controls.Driving.HandBrake.ReadValue<float>().ToString("F3")
+        //);
+
+        if (controls == null) return;
+
+        Debug.Log("Driving: " + controls.Driving != null ? "FOUND" : "NULL");
+
         Steering = controls.Driving.Steer.ReadValue<float>();
-        Throttle = controls.Driving.Throttle.ReadValue<float>();
         Brake = controls.Driving.Brake.ReadValue<float>();
-
         Handbrake = controls.Driving.HandBrake.IsPressed();
-
-        //Debug.Log($"Steer: {Steering:F2}" + $"Throttle: {Throttle:F2} " + $"Brake: {Brake:F2}");
     }
 }

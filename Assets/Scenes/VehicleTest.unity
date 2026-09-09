@@ -212,7 +212,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 218902766}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 9a25816a1c088fb459fb338f53bfc745, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -343,7 +343,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Wheel
   wheelRadius: 0.35
-  suspensionDistance: 0.5
+  suspensionDistance: 0.65
+  suspensionSpring: 15000
+  suspensionDamper: 6000
+  isSteeringWheel: 1
+  maxSteeringAngle: 30
+  driveForce: 8000
 --- !u!1 &244148021
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,7 +541,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Wheel
   wheelRadius: 0.35
-  suspensionDistance: 0.5
+  suspensionDistance: 0.65
+  suspensionSpring: 15000
+  suspensionDamper: 6000
+  isSteeringWheel: 1
+  maxSteeringAngle: 30
+  driveForce: 8000
 --- !u!1 &553147657
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,7 +660,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1.7904397, y: 0.59056354, z: 3.9889565}
   m_Center: {x: 0.0028432608, y: 0, z: -0.0027412772}
@@ -699,7 +709,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Wheel
   wheelRadius: 0.35
-  suspensionDistance: 0.5
+  suspensionDistance: 0.65
+  suspensionSpring: 15000
+  suspensionDamper: 6000
+  isSteeringWheel: 0
+  maxSteeringAngle: 30
+  driveForce: 8000
 --- !u!1 &760062998
 GameObject:
   m_ObjectHideFlags: 0
@@ -1159,7 +1174,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1501473425}
   serializedVersion: 5
-  m_Mass: 1200
+  m_Mass: 1500
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -1191,8 +1206,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarController
   centerOfMass: {fileID: 760062999}
-  accelerationForce: 8000
-  maxSpeed: 30
 --- !u!1 &1624069061
 GameObject:
   m_ObjectHideFlags: 0
@@ -1352,7 +1365,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Wheel
   wheelRadius: 0.35
-  suspensionDistance: 0.5
+  suspensionDistance: 0.65
+  suspensionSpring: 15000
+  suspensionDamper: 6000
+  isSteeringWheel: 0
+  maxSteeringAngle: 30
+  driveForce: 8000
 --- !u!1 &2007194413
 GameObject:
   m_ObjectHideFlags: 0
