@@ -154,6 +154,99 @@ Transform:
   - {fileID: 557988241}
   m_Father: {fileID: 1327711677}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &112718940
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 112718943}
+  - component: {fileID: 112718942}
+  - component: {fileID: 112718941}
+  m_Layer: 0
+  m_Name: Terrain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!154 &112718941
+TerrainCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112718940}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_TerrainData: {fileID: 15600000, guid: ab96f7dc789932245b632d022e4edb2c, type: 2}
+  m_EnableTreeColliders: 1
+--- !u!218 &112718942
+Terrain:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112718940}
+  m_Enabled: 1
+  serializedVersion: 6
+  m_TerrainData: {fileID: 15600000, guid: ab96f7dc789932245b632d022e4edb2c, type: 2}
+  m_TreeDistance: 5000
+  m_TreeBillboardDistance: 50
+  m_TreeCrossFadeLength: 5
+  m_TreeMaximumFullLODCount: 50
+  m_DetailObjectDistance: 80
+  m_DetailObjectDensity: 1
+  m_HeightmapPixelError: 5
+  m_SplatMapDistance: 1000
+  m_HeightmapMinimumLODSimplification: 0
+  m_HeightmapMaximumLOD: 0
+  m_ShadowCastingMode: 2
+  m_DrawHeightmap: 1
+  m_DrawInstanced: 0
+  m_DrawTreesAndFoliage: 1
+  m_StaticShadowCaster: 0
+  m_IgnoreQualitySettings: 0
+  m_ReflectionProbeUsage: 1
+  m_MaterialTemplate: {fileID: 2100000, guid: 594ea882c5a793440b60ff72d896021e, type: 2}
+  m_BakeLightProbesForTrees: 1
+  m_PreserveTreePrototypeLayers: 0
+  m_DeringLightProbesForTrees: 1
+  m_ReceiveGI: 1
+  m_ScaleInLightmap: 0.0256
+  m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
+  m_GroupingID: 0
+  m_RenderingLayerMask: 1
+  m_AllowAutoConnect: 1
+  m_EnableHeightmapRayTracing: 1
+  m_EnableTreesAndDetailsRayTracing: 0
+  m_TreeMotionVectorModeOverride: 3
+--- !u!4 &112718943
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112718940}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -14.4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &218789237
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,7 +417,7 @@ Transform:
   m_GameObject: {fileID: 224009072}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -342,13 +435,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf1dc8ef211fd834c84a56643e6b9695, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Wheel
-  wheelRadius: 0.35
-  suspensionDistance: 0.65
+  wheelRadius: 0.5
+  VisualWheel: {fileID: 1624069062}
+  suspensionDistance: 0.5
   suspensionSpring: 15000
-  suspensionDamper: 6000
+  suspensionDamper: 500
   isSteeringWheel: 1
   maxSteeringAngle: 30
   driveForce: 8000
+  brakeForce: 12000
 --- !u!1 &244148021
 GameObject:
   m_ObjectHideFlags: 0
@@ -400,7 +495,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5000001
   m_Height: 2
@@ -522,7 +617,7 @@ Transform:
   m_GameObject: {fileID: 530194778}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -540,13 +635,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf1dc8ef211fd834c84a56643e6b9695, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Wheel
-  wheelRadius: 0.35
-  suspensionDistance: 0.65
+  wheelRadius: 0.5
+  VisualWheel: {fileID: 2051758420}
+  suspensionDistance: 0.5
   suspensionSpring: 15000
-  suspensionDamper: 6000
+  suspensionDamper: 500
   isSteeringWheel: 1
   maxSteeringAngle: 30
   driveForce: 8000
+  brakeForce: 12000
 --- !u!1 &553147657
 GameObject:
   m_ObjectHideFlags: 0
@@ -637,7 +734,7 @@ Transform:
   m_GameObject: {fileID: 588644703}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -660,7 +757,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1.7904397, y: 0.59056354, z: 3.9889565}
   m_Center: {x: 0.0028432608, y: 0, z: -0.0027412772}
@@ -690,7 +787,7 @@ Transform:
   m_GameObject: {fileID: 698009152}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -708,13 +805,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf1dc8ef211fd834c84a56643e6b9695, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Wheel
-  wheelRadius: 0.35
-  suspensionDistance: 0.65
+  wheelRadius: 0.5
+  VisualWheel: {fileID: 244148022}
+  suspensionDistance: 0.5
   suspensionSpring: 15000
-  suspensionDamper: 6000
+  suspensionDamper: 500
   isSteeringWheel: 0
   maxSteeringAngle: 30
   driveForce: 8000
+  brakeForce: 12000
 --- !u!1 &760062998
 GameObject:
   m_ObjectHideFlags: 0
@@ -1152,6 +1251,7 @@ Transform:
   - {fileID: 1063826309}
   - {fileID: 1327711677}
   - {fileID: 218789238}
+  - {fileID: 2058670444}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1501473427
@@ -1257,7 +1357,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5000001
   m_Height: 2
@@ -1346,7 +1446,7 @@ Transform:
   m_GameObject: {fileID: 1776107837}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1364,13 +1464,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf1dc8ef211fd834c84a56643e6b9695, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Wheel
-  wheelRadius: 0.35
-  suspensionDistance: 0.65
+  wheelRadius: 0.5
+  VisualWheel: {fileID: 2007194414}
+  suspensionDistance: 0.5
   suspensionSpring: 15000
-  suspensionDamper: 6000
+  suspensionDamper: 500
   isSteeringWheel: 0
   maxSteeringAngle: 30
   driveForce: 8000
+  brakeForce: 12000
 --- !u!1 &2007194413
 GameObject:
   m_ObjectHideFlags: 0
@@ -1422,7 +1524,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5000001
   m_Height: 2
@@ -1536,7 +1638,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5000001
   m_Height: 2
@@ -1729,18 +1831,18 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2058670440}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.20296863, y: 0.62084234, z: -0.170821, w: 0.73768467}
-  m_LocalPosition: {x: -15.30714, y: 9.12804, z: -4.5389595}
+  m_LocalRotation: {x: 0.11726313, y: -0.39450225, z: 0.05083785, w: 0.90996313}
+  m_LocalPosition: {x: 16.86, y: 7.06, z: -11.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Father: {fileID: 1501473426}
+  m_LocalEulerAnglesHint: {x: 14.686, y: -46.877, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 2058670444}
   - {fileID: 897417442}
   - {fileID: 218902770}
   - {fileID: 1501473426}
+  - {fileID: 112718943}

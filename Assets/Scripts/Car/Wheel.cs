@@ -9,12 +9,15 @@ public class Wheel : MonoBehaviour
     private Rigidbody carRigidbody;
 
     [Header("Wheel Settings")]
-    [SerializeField] private float wheelRadius = 0.5f;
+    [SerializeField] private float wheelRadius = 0.50f;
+    [SerializeField] private Transform VisualWheel;
+
+    private Vector3 visualWheelStartPosition;
 
     [Header("Suspension Settings")]
-    [SerializeField] private float suspensionDistance = 0.65f;
-    [SerializeField] private float suspensionSpring = 1000f;
-    [SerializeField] private float suspensionDamper = 0f;
+    [SerializeField] private float suspensionDistance = 0.35f;
+    [SerializeField] private float suspensionSpring = 3000f;
+    [SerializeField] private float suspensionDamper = 500f;
 
     [Header("Steering Settings")]
     [SerializeField] private bool isSteeringWheel;
@@ -22,6 +25,7 @@ public class Wheel : MonoBehaviour
 
     [Header("Drive Settings")]
     [SerializeField] private float driveForce = 8000f;
+    [SerializeField] private float brakeForce = 12000f;
 
     public bool IsGrounded { get; private set; }
     public RaycastHit GroundHit { get; private set; }
@@ -34,6 +38,7 @@ public class Wheel : MonoBehaviour
     {
         carRigidbody = GetComponentInParent<Rigidbody>();
         carInput = GetComponentInParent<CarInput>();
+        visualWheelStartPosition = VisualWheel.localPosition;
 
         Debug.Log(
             gameObject.name +
@@ -52,35 +57,45 @@ public class Wheel : MonoBehaviour
 
         if (IsGrounded)
         {
+            CalculateSuspension();
+            ApplySuspension();
+
+            UpdateWheelVisual();
+
             ApplyDriveForce();
-            //ApplySteeringForce();
-            //CalculateSuspension();
-            //ApplySuspension();
+            ApplyBrake();
         }
     }
 
     private void CheckGrounded()
     {
-        Ray ray = new Ray (transform.position, -transform.up);
+        Ray ray = new Ray(transform.position, -transform.up);
 
-        float raylength = wheelRadius + suspensionDistance;
+        float rayLength = 0.35f + wheelRadius + suspensionDistance;
 
         IsGrounded = Physics.Raycast(
             ray,
             out RaycastHit hit,
-            raylength
+            rayLength
         );
-        
-        if(IsGrounded)
-        {
-            GroundHit = hit;
 
-           // Debug.Log(
-            //gameObject.name +
-            //" | Hit: " + hit.collider.gameObject.name +
-            //" | Distance: " + hit.distance.ToString("F3") +
-            //" | Layer: " + LayerMask.LayerToName(hit.collider.gameObject.layer)
-            //);
+       Debug.Log(
+            gameObject.name +
+            " | Grounded: " + IsGrounded +
+            " | Ray Distance: " + rayLength.ToString("F2") +
+            " | Hit Distance: " + 
+            (IsGrounded ? hit.distance.ToString("F3") : "NONE")
+        );
+
+        Debug.DrawRay(
+            transform.position,
+            -transform.up * rayLength,
+            IsGrounded ? Color.green : Color.red
+        );
+
+        if (IsGrounded)
+        {
+         GroundHit = hit;
         }
     }
 
@@ -88,29 +103,50 @@ public class Wheel : MonoBehaviour
 
     private void CalculateSuspension()
     {
-        float rideHeight = 0.50f; // Desired ride height from the wheel's center to the ground
+        float restDistance =
+            0.35f + wheelRadius;
 
-        float currentHeight = GroundHit.distance;
+        float suspensionOffset =
+            restDistance - GroundHit.distance;
 
-        SuspensionCompression = (rideHeight - currentHeight) / suspensionDistance;
-
-        SuspensionCompression = Mathf.Clamp01(SuspensionCompression);
+        float compression =
+            suspensionOffset / suspensionDistance;
 
         Debug.Log(
             gameObject.name +
             " | Ground: " + GroundHit.distance.ToString("F3") +
-            " | Compression: " + SuspensionCompression.ToString("F3") +
-            " | Spring Force: " +
-            (SuspensionCompression * suspensionSpring).ToString("F1")
-            );
+            " | Rest: " + restDistance.ToString("F3") +
+            " | Offset: " + suspensionOffset.ToString("F3") +
+            " | Raw Compression: " + compression.ToString("F3")
+        );
+
+        SuspensionCompression = Mathf.Clamp01(compression);
     }
 
     private void ApplySuspension()
     {
-        float springForce = suspensionSpring * SuspensionCompression;
+        float restDistance = 0.35f + wheelRadius;
+
+        float suspensionOffset =
+            restDistance - GroundHit.distance;
+
+        float springForce =
+            suspensionOffset * suspensionSpring;
+
+        Vector3 wheelVelocity =
+            carRigidbody.GetPointVelocity(transform.position);
+
+        float suspensionVelocity =
+            Vector3.Dot(transform.up, wheelVelocity);
+
+        float damperForce =
+            suspensionVelocity * suspensionDamper;
+
+        float totalForce =
+            springForce - damperForce;
 
         carRigidbody.AddForceAtPosition(
-            transform.up * springForce,
+            transform.up * totalForce,
             transform.position,
             ForceMode.Force
         );
@@ -122,6 +158,12 @@ public class Wheel : MonoBehaviour
         float throttleInput = carInput.Throttle;
 
         Vector3 driveDirection = transform.forward;
+
+        Debug.Log(
+            gameObject.name +
+            " | Throttle: " + throttleInput.ToString("F2") +
+            " | Grounded: " + IsGrounded
+        );
 
         carRigidbody.AddForceAtPosition(
             driveDirection *
@@ -147,12 +189,52 @@ public class Wheel : MonoBehaviour
 
         transform.localRotation = Quaternion.Euler(0f, steeringAngle, 0f);
 
-        Debug.Log(
-    gameObject.name +
-    " | Steering: " + steeringInput +
-    " | Angle: " + steeringAngle + 
-    " | Forward: " + transform.forward.ToString("F3")
-    );
+        //Debug.Log(
+        //    gameObject.name +
+        //    " | Steering: " + steeringInput +
+        //    " | Angle: " + steeringAngle + 
+        //    " | Forward: " + transform.forward.ToString("F3")
+        //    );
+    }
+
+    private void ApplyBrake()
+    {
+       // Debug.Log(
+        //    gameObject.name +
+        //    " | Brake: " + carInput.Brake
+      //  );
+
+        float brakeInput = carInput.Brake;
+
+        if (brakeInput <= 0f) return;
+
+        Vector3 forwardVelocity = Vector3.Project(carRigidbody.linearVelocity, transform.forward);
+
+        if (forwardVelocity.sqrMagnitude < 0.01f) return;
+
+        Vector3 brakeDirection = -forwardVelocity.normalized;
+
+        carRigidbody.AddForceAtPosition(
+            brakeDirection *
+            brakeInput *
+            brakeForce, transform.position,
+            ForceMode.Force
+        );
+    }
+
+    private void UpdateWheelVisual()
+    {
+        if (VisualWheel == null)
+            return;
+
+        float restDistance = 0.85f;
+
+        float wheelMovement =
+            restDistance - GroundHit.distance;
+
+        VisualWheel.localPosition =
+            visualWheelStartPosition +
+            new Vector3(0f, wheelMovement, 0f);
     }
 
     private void OnDrawGizmosSelected()
