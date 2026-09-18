@@ -385,8 +385,8 @@ Transform:
   m_GameObject: {fileID: 218902766}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -4.371, z: 0.5}
-  m_LocalScale: {x: 50, y: 0.1, z: 50}
+  m_LocalPosition: {x: 182.2, y: -4.371, z: 198.4}
+  m_LocalScale: {x: 409.9, y: 0.1, z: 524.6}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -444,6 +444,9 @@ MonoBehaviour:
   maxSteeringAngle: 30
   driveForce: 8000
   brakeForce: 12000
+  tireGrip: 5000
+  longitudinalGrip: 1500
+  wheelInertia: 2
 --- !u!1 &244148021
 GameObject:
   m_ObjectHideFlags: 0
@@ -644,6 +647,9 @@ MonoBehaviour:
   maxSteeringAngle: 30
   driveForce: 8000
   brakeForce: 12000
+  tireGrip: 5000
+  longitudinalGrip: 1500
+  wheelInertia: 2
 --- !u!1 &553147657
 GameObject:
   m_ObjectHideFlags: 0
@@ -814,6 +820,9 @@ MonoBehaviour:
   maxSteeringAngle: 30
   driveForce: 8000
   brakeForce: 12000
+  tireGrip: 5000
+  longitudinalGrip: 1500
+  wheelInertia: 2
 --- !u!1 &760062998
 GameObject:
   m_ObjectHideFlags: 0
@@ -1306,6 +1315,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarController
   centerOfMass: {fileID: 760062999}
+  maxTiltAngle: 35
+  rolloverStrength: 5000
+  rolloverDamping: 500
 --- !u!1 &1624069061
 GameObject:
   m_ObjectHideFlags: 0
@@ -1473,6 +1485,9 @@ MonoBehaviour:
   maxSteeringAngle: 30
   driveForce: 8000
   brakeForce: 12000
+  tireGrip: 5000
+  longitudinalGrip: 1500
+  wheelInertia: 2
 --- !u!1 &2007194413
 GameObject:
   m_ObjectHideFlags: 0
