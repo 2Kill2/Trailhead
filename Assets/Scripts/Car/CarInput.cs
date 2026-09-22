@@ -1,11 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-/// <summary>
-/// Reads player input and exposes normalized values for the vehicle.
-/// This class never applies physics.
-/// </summary>
-
 public class CarInput : MonoBehaviour
 {
     private TrailHeadControls controls;
@@ -21,6 +16,9 @@ public class CarInput : MonoBehaviour
     public float Brake {get; private set;}
 
     public bool Handbrake {get; private set;}
+
+    public bool UpShift {get; private set;}
+    public bool DownShift {get; private set;}
 
     private void Awake()
     {
@@ -41,10 +39,21 @@ public class CarInput : MonoBehaviour
     {
         if (controls == null) return;
 
-        //Debug.Log("Driving: " + controls.Driving != null ? "FOUND" : "NULL");
-
         Steering = controls.Driving.Steer.ReadValue<float>();
         Brake = controls.Driving.Brake.ReadValue<float>();
         Handbrake = controls.Driving.HandBrake.IsPressed();
+
+        UpShift = controls.Driving.UpShift.WasPressedThisFrame();
+        DownShift = controls.Driving.DownShift.WasPressedThisFrame();
+
+        if (DownShift)
+        {
+            Debug.Log("Downshift PRESSED");
+        }
+
+        if (UpShift)
+        {
+            Debug.Log("UpShift PRESSED");
+        }
     }
 }

@@ -127,6 +127,24 @@ public partial class @TrailHeadControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DownShift"",
+                    ""type"": ""Button"",
+                    ""id"": ""7be2e7d6-f8f2-43b9-807b-171e02b5ea73"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UpShift"",
+                    ""type"": ""Button"",
+                    ""id"": ""231d9131-c03e-4380-bb98-b6e447dade8a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -239,6 +257,50 @@ public partial class @TrailHeadControls: IInputActionCollection2, IDisposable
                     ""action"": ""Throttle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ab9234a1-7340-4546-a1f8-8af5613e6e66"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DownShift"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""37fe4341-0bdd-4feb-9633-b210d19ca248"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DownShift"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6340daee-9ddf-4c1e-866b-e4444ed064c1"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UpShift"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4d28784d-1df5-40dc-a6dc-e52cb58f1ae3"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UpShift"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -307,6 +369,8 @@ public partial class @TrailHeadControls: IInputActionCollection2, IDisposable
         m_Driving_Throttle = m_Driving.FindAction("Throttle", throwIfNotFound: true);
         m_Driving_Brake = m_Driving.FindAction("Brake", throwIfNotFound: true);
         m_Driving_HandBrake = m_Driving.FindAction("HandBrake", throwIfNotFound: true);
+        m_Driving_DownShift = m_Driving.FindAction("DownShift", throwIfNotFound: true);
+        m_Driving_UpShift = m_Driving.FindAction("UpShift", throwIfNotFound: true);
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Newaction = m_Camera.FindAction("New action", throwIfNotFound: true);
@@ -399,6 +463,8 @@ public partial class @TrailHeadControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Driving_Throttle;
     private readonly InputAction m_Driving_Brake;
     private readonly InputAction m_Driving_HandBrake;
+    private readonly InputAction m_Driving_DownShift;
+    private readonly InputAction m_Driving_UpShift;
     /// <summary>
     /// Provides access to input actions defined in input action map "Driving".
     /// </summary>
@@ -426,6 +492,14 @@ public partial class @TrailHeadControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Driving/HandBrake".
         /// </summary>
         public InputAction @HandBrake => m_Wrapper.m_Driving_HandBrake;
+        /// <summary>
+        /// Provides access to the underlying input action "Driving/DownShift".
+        /// </summary>
+        public InputAction @DownShift => m_Wrapper.m_Driving_DownShift;
+        /// <summary>
+        /// Provides access to the underlying input action "Driving/UpShift".
+        /// </summary>
+        public InputAction @UpShift => m_Wrapper.m_Driving_UpShift;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -464,6 +538,12 @@ public partial class @TrailHeadControls: IInputActionCollection2, IDisposable
             @HandBrake.started += instance.OnHandBrake;
             @HandBrake.performed += instance.OnHandBrake;
             @HandBrake.canceled += instance.OnHandBrake;
+            @DownShift.started += instance.OnDownShift;
+            @DownShift.performed += instance.OnDownShift;
+            @DownShift.canceled += instance.OnDownShift;
+            @UpShift.started += instance.OnUpShift;
+            @UpShift.performed += instance.OnUpShift;
+            @UpShift.canceled += instance.OnUpShift;
         }
 
         /// <summary>
@@ -487,6 +567,12 @@ public partial class @TrailHeadControls: IInputActionCollection2, IDisposable
             @HandBrake.started -= instance.OnHandBrake;
             @HandBrake.performed -= instance.OnHandBrake;
             @HandBrake.canceled -= instance.OnHandBrake;
+            @DownShift.started -= instance.OnDownShift;
+            @DownShift.performed -= instance.OnDownShift;
+            @DownShift.canceled -= instance.OnDownShift;
+            @UpShift.started -= instance.OnUpShift;
+            @UpShift.performed -= instance.OnUpShift;
+            @UpShift.canceled -= instance.OnUpShift;
         }
 
         /// <summary>
@@ -747,6 +833,20 @@ public partial class @TrailHeadControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnHandBrake(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "DownShift" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDownShift(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "UpShift" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUpShift(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Camera" which allows adding and removing callbacks.

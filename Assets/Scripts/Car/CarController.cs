@@ -1,3 +1,6 @@
+using System;
+using System.Security.Cryptography;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -11,6 +14,31 @@ public class CarController : MonoBehaviour
     [SerializeField] private float maxTiltAngle = 35f;
     [SerializeField] private float rolloverStrength = 5000f;
     [SerializeField] private float rolloverDamping = 500f;
+
+    [Header("Transmission")]
+    [SerializeField] private int currentGear = 1;
+    [SerializeField] private int maxGear = 5;
+    [SerializeField] private float reverseRatio = -.50f;
+    [SerializeField] private float[] gearRatios =
+    {
+        0f, // N
+        1f, // 1st
+        0.75f, // 2nd
+        0.55f,  // 3rd
+        0.40f,  // 4th
+        0.30f   // 5th
+    };
+    [SerializeField] private float[] gearMinSpeeds =
+    { 
+        0f,   // Neutral
+        0f,   // 1st
+        15f,  // 2nd
+        30f,  // 3rd
+        50f,  // 4th
+        70f   // 5th
+    };
+    [SerializeField] private float maxGearSpeed = 120f;
+    public int CurrentGear => currentGear;
 
     private Rigidbody rb;
     private CarInput carInput;
@@ -30,6 +58,11 @@ public class CarController : MonoBehaviour
     private void FixedUpdate()
     {
         CheckRollover();
+    }
+
+    private void Update()
+    {
+        UpdateTransmission();
     }
 
     private void CheckRollover()
@@ -62,6 +95,99 @@ public class CarController : MonoBehaviour
             correctiveTorque + dampingTorque,
             ForceMode.Force
         );
+    }
+
+    private void UpdateTransmission()
+    {
+        float speed =
+            rb.linearVelocity.magnitude;
+
+        bool isStopped =
+            speed < 1f;
+        
+        if (carInput.UpShift)
+        {
+            currentGear++;
+
+            if (currentGear > maxGear)
+                currentGear = maxGear;
+        }
+
+        if (carInput.DownShift)
+        {
+            if (currentGear == 0 && !isStopped)
+            return;
+
+            currentGear--;
+
+            if (currentGear < -1)
+                currentGear = -1;
+        }
+    }
+
+    public float GetGearRatio()
+    {
+        if (currentGear == -1)
+            return reverseRatio;
+        
+        if (currentGear == 0)
+            return 0f;
+        
+        return gearRatios[currentGear];
+    }
+
+    public float GetGearPowerMulitplier()
+    {
+        if (currentGear <= 0)
+            return 0f;
+
+        float speedKmh =
+            rb.linearVelocity.magnitude * 3.6f;
+        
+        float minSped =
+            gearMinSpeeds[currentGear];
+
+        float minSpeed =
+            gearMinSpeeds[currentGear];
+
+        float maxSpeed;
+
+        if (currentGear == maxGear)
+        {
+            maxSpeed = maxGearSpeed;
+        }
+        else
+        {
+            maxSpeed =
+                gearMinSpeeds[currentGear + 1];
+        }
+
+        if (speedKmh < minSped)
+            return 0.5f;
+        
+        if (speedKmh >= maxSpeed)
+            return 0.5f;
+        
+        return 1f;
+    }
+
+    public float GetCurrentGearMinSpeed()
+    {
+        if (currentGear <= 0)
+            return 0f;
+
+        return gearMinSpeeds[currentGear];
+    }
+
+    public float GetCurrentGearMaxSpeed()
+    {
+        if (currentGear <= 0)
+            return 0f;
+
+        if (currentGear == maxGear)
+            return maxGearSpeed;
+
+        return gearMinSpeeds[currentGear + 1];
     }
 
     private void OnDrawGizmos()
