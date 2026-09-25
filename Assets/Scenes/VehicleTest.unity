@@ -385,7 +385,7 @@ Transform:
   m_GameObject: {fileID: 218902766}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 182.2, y: -4.371, z: 198.4}
+  m_LocalPosition: {x: 182.2, y: -4.9, z: 198.4}
   m_LocalScale: {x: 409.9, y: 0.1, z: 524.6}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -447,6 +447,10 @@ MonoBehaviour:
   tireGrip: 5000
   longitudinalGrip: 1500
   wheelInertia: 2
+  terrain: {fileID: 112718942}
+  roadLayer: {fileID: 8574412962073106934, guid: 6a22bfdda3306cd4f96c34b93696acb7, type: 2}
+  gravelLayer: {fileID: 8574412962073106934, guid: 1f33240d95acae44da0e2f3cd5d74246, type: 2}
+  mudLayer: {fileID: 8574412962073106934, guid: 0e6b248b9f65e324db6316189dad7dc4, type: 2}
 --- !u!1 &244148021
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,6 +654,10 @@ MonoBehaviour:
   tireGrip: 5000
   longitudinalGrip: 1500
   wheelInertia: 2
+  terrain: {fileID: 112718942}
+  roadLayer: {fileID: 8574412962073106934, guid: 6a22bfdda3306cd4f96c34b93696acb7, type: 2}
+  gravelLayer: {fileID: 8574412962073106934, guid: 1f33240d95acae44da0e2f3cd5d74246, type: 2}
+  mudLayer: {fileID: 8574412962073106934, guid: 0e6b248b9f65e324db6316189dad7dc4, type: 2}
 --- !u!1 &553147657
 GameObject:
   m_ObjectHideFlags: 0
@@ -823,6 +831,10 @@ MonoBehaviour:
   tireGrip: 5000
   longitudinalGrip: 1500
   wheelInertia: 2
+  terrain: {fileID: 112718942}
+  roadLayer: {fileID: 8574412962073106934, guid: 6a22bfdda3306cd4f96c34b93696acb7, type: 2}
+  gravelLayer: {fileID: 8574412962073106934, guid: 1f33240d95acae44da0e2f3cd5d74246, type: 2}
+  mudLayer: {fileID: 8574412962073106934, guid: 0e6b248b9f65e324db6316189dad7dc4, type: 2}
 --- !u!1 &760062998
 GameObject:
   m_ObjectHideFlags: 0
@@ -1318,6 +1330,24 @@ MonoBehaviour:
   maxTiltAngle: 35
   rolloverStrength: 5000
   rolloverDamping: 500
+  currentGear: 1
+  maxGear: 5
+  reverseRatio: -0.5
+  gearRatios:
+  - 0
+  - 1
+  - 0.75
+  - 0.55
+  - 0.4
+  - 0.3
+  gearMinSpeeds:
+  - 0
+  - 0
+  - 15
+  - 30
+  - 50
+  - 70
+  maxGearSpeed: 120
 --- !u!1 &1624069061
 GameObject:
   m_ObjectHideFlags: 0
@@ -1488,6 +1518,10 @@ MonoBehaviour:
   tireGrip: 5000
   longitudinalGrip: 1500
   wheelInertia: 2
+  terrain: {fileID: 112718942}
+  roadLayer: {fileID: 8574412962073106934, guid: 6a22bfdda3306cd4f96c34b93696acb7, type: 2}
+  gravelLayer: {fileID: 8574412962073106934, guid: 1f33240d95acae44da0e2f3cd5d74246, type: 2}
+  mudLayer: {fileID: 8574412962073106934, guid: 0e6b248b9f65e324db6316189dad7dc4, type: 2}
 --- !u!1 &2007194413
 GameObject:
   m_ObjectHideFlags: 0

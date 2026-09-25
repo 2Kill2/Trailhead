@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 public class Wheel : MonoBehaviour
 {
@@ -29,6 +30,21 @@ public class Wheel : MonoBehaviour
 
     [Header("Wheel Rotation Settings")]
     [SerializeField] private float wheelInertia = 2.0f;
+
+    [Header("Terrain")]
+    [SerializeField] private Terrain terrain;
+    [SerializeField] private TerrainLayer roadLayer;
+    [SerializeField] private TerrainLayer gravelLayer;
+    [SerializeField] private TerrainLayer mudLayer;
+
+    private float[,,] terrainAlphamaps;
+
+    private int roadLayerIndex = -1;
+    private int gravelLayerIndex = -1;
+    private int mudLayerIndex = -1;
+
+    public string CurrentSurface {get; private set;} = "Unknown";
+    
     private float wheelAngularVelocity;
 
     public bool IsGrounded { get; private set; }
@@ -45,6 +61,32 @@ public class Wheel : MonoBehaviour
         carController = GetComponentInParent<CarController>();
         visualWheelStartPosition = VisualWheel.localPosition;
 
+        //Terrain Check
+        if (terrain != null)
+        {
+            TerrainData terrainData = terrain.terrainData;
+
+            //cache painted terrain layer data
+            terrainAlphamaps =
+                terrainData.GetAlphamaps(0,0,terrainData.alphamapWidth, terrainData.alphamapHeight);
+
+            //find the indices of driving terrain layers
+            TerrainLayer[] layers =
+                terrainData.terrainLayers;
+            
+            for (int i = 0; i < layers.Length; i++)
+            {
+                if (layers[i] == roadLayer)
+                    roadLayerIndex = i;
+
+                if (layers[i] == gravelLayer)
+                    gravelLayerIndex = i;
+                
+                if (layers[i] == mudLayer)
+                    mudLayerIndex = i;
+            }
+        }
+
         Debug.Log(
             gameObject.name +
             " | Rigidbody: " +
@@ -57,6 +99,8 @@ public class Wheel : MonoBehaviour
     private void FixedUpdate()
     {
         CheckGrounded();
+
+        DetectTerrainSurface();
         
         ApplySteering();
 
@@ -406,6 +450,81 @@ public class Wheel : MonoBehaviour
             transform.position -
             transform.up *
             suspensionDistance
+        );
+    }
+
+    private void DetectTerrainSurface()
+    {
+        CurrentSurface = "Unknown";
+
+        if (!IsGrounded)
+            return;
+        
+        if (terrain == null || terrainAlphamaps == null)
+            return;
+
+        //convert wheels world space hit posisition to terrains local coords
+        Vector3 terrainPosition =
+            terrain.transform.InverseTransformPoint(GroundHit.point);
+
+        TerrainData terrainData = terrain.terrainData;
+
+        //convert local terrain pos into norm cood
+        float normalizedX =
+            terrainPosition.x / terrainData.size.x;
+
+        float normalizedZ =
+            terrainPosition.z / terrainData.size.z;
+
+        //convert normalized coord into alphamap coord
+        int mapX =
+            Mathf.Clamp(Mathf.RoundToInt(normalizedX * (terrainData.alphamapWidth - 1)),
+            0, terrainData.alphamapWidth - 1);
+
+        int mapY =
+            Mathf.Clamp(Mathf.RoundToInt(normalizedZ * (terrainData.alphamapHeight -1)),
+            0, terrainData.alphamapWidth -1);
+
+        //find which driving surface has the strongest painted weight at location
+        float roadWeight =
+            roadLayerIndex >= 0
+                ? terrainAlphamaps[mapY,mapX, roadLayerIndex]
+                : 0f;
+        
+        float gravelWeight =
+            gravelLayerIndex >= 0
+            ? terrainAlphamaps[mapY, mapX, gravelLayerIndex]
+            : 0f;
+
+        float mudWeight =
+            mudLayerIndex >= 0
+            ? terrainAlphamaps[mapY, mapX, mudLayerIndex]
+            : 0f;
+
+        if (roadWeight >= gravelWeight &&
+            roadWeight >= mudWeight)
+        {
+            CurrentSurface = "Road";
+        }
+        else if (gravelWeight >= mudWeight)
+        {
+            CurrentSurface = "Gravel";
+        }
+        else
+        {
+            CurrentSurface = "Mud";
+        }
+
+        Debug.Log(
+            gameObject.name +
+            " | Surface: " +
+            CurrentSurface +
+            " | Road: " +
+            roadWeight.ToString("F2") +
+            " | Gravel: " +
+            gravelWeight.ToString("F2") +
+            " | Mud: " +
+            mudWeight.ToString("F2")
         );
     }
 
